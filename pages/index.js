@@ -5,9 +5,12 @@ import styles from '../styles/Home.module.css'
 import { useState } from 'react';
 export default function Home() {
   const [prompt, setPrompt] = useState("");
-  const [img, setImg] = useState();
+  const [imgs, setImgs] = useState();
+  const [loading, setLoading] = useState(false);
   const generateImage = async () => {
-    try {
+    if (prompt) {
+      try {
+      setLoading(true);
       const response = await fetch("/api/generate", {
         method: "POST",
         headers: {
@@ -18,10 +21,12 @@ export default function Home() {
         })
       })
       const data = await response.json();
-      setImg(data);
+      setImgs(data);
+      setLoading(false);
     } catch (error) {
       console.log(error)
-    }
+      setLoading(false);
+    }}
   }
 
   return (
@@ -30,16 +35,55 @@ export default function Home() {
               Mint NFTs in seconds with{" "}
               <span className={styles.Dalle}>DALL-E</span>
           </h1>
+          <span className={styles.examples}>
+              <img
+                  className={styles.example3}
+                  src="https://cdn.discordapp.com/attachments/666142372580556800/1076025257770631168/image.png"
+              ></img>
+              <img
+                  className={styles.example}
+                  src="https://cdn.discordapp.com/attachments/666142372580556800/1076019182002520094/image.png"
+              ></img>
+              <img
+                  className={styles.example1}
+                  src="https://cdn.discordapp.com/attachments/666142372580556800/1076021854193590312/image.png"
+              ></img>
+              <img
+                  className={styles.example2}
+                  src="https://cdn.discordapp.com/attachments/666142372580556800/1076022615489126401/image.png"
+              ></img>
+          </span>
           <div className={styles.field}>
               <input
                   value={prompt}
-                  onChange={(e) => {setPrompt(e.target.value)}}
+                  onChange={(e) => {
+                      setPrompt(e.target.value);
+                  }}
                   className={styles.input}
-                  placeholder="Portrait of an ape drinking a latte"
+                  placeholder="An impressionist oil painting of an ape drinking a latte"
+                  required
               ></input>
-              <div onClick={generateImage} className={styles.button}>GO</div>
+              <div onClick={generateImage} className={styles.button}>
+                  GO
+              </div>
           </div>
-          { img ? <img src={img}></img> : null}
+          {loading ? (
+              <div className={styles.loading}>
+                  <div className={styles.loadimg}></div>
+                  <div className={styles.loadimg}></div>
+                  <div className={styles.loadimg}></div>
+                  <div className={styles.loadimg}></div>
+                  <div className={styles.loadimg}></div>
+              </div>
+          ) : null}
+          {imgs && !loading ? (
+              <div className={styles.imgs}>
+                  {imgs.map((img) => {
+                      return <img className={styles.nft} src={img.url}></img>;
+                  })}
+              </div>
+          ) : null}
+
           <p className={styles.Replit}>
               Built by eefh1 on Replit for
               <span>

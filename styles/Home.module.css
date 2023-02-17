@@ -5,12 +5,14 @@
   align-items: center;
   height: 80vh;
   font-size: 40px;
+  margin-top: 100px;
   color: rgb(0, 0, 0);
   font-family: 'Roboto', sans-serif;
   text-shadow: 8px 8px 20px rgba(0, 91, 151, 0.185);
 }
 .title {
   width: 50%;
+  z-index: 2;
 }
 .Dalle {
   color: rgb(0, 89, 255);
@@ -79,5 +81,81 @@
 }
 .Alchemy {
   margin-left: 10px;
-  width: 100px;
+  width: 96px;
+}
+
+.nft {
+  border-radius: 8px;
+  transition: 300ms;
+  user-select: none;
+  cursor: pointer;
+  margin: 64px 8px;
+}
+
+.loading {
+  display: flex;
+}
+
+.loadimg {
+  width: 256px;
+  height: 256px;
+  margin: 64px 8px;
+  background-color: rgba(39, 82, 121, 0.192);
+  border-radius: 8px;
+  animation: loading 1s linear infinite
+}
+
+@keyframes loading {
+  0% {
+    opacity: 0%;
+  }
+  50% {
+    opacity: 100%;
+  }
+  100%{
+    opacity: 0%;
+  }
+}
+
+.nft:hover {
+  transform: scale(1.2);
+  box-shadow: 0px 0px 20px rgba(0, 113, 206, 0.219);
+}
+
+.example {
+  border-radius: 8px;
+  height: 256px;
+  margin: 10px;
+    border: solid 3px rgba(0, 64, 138, 0.26);
+      box-shadow: 10px 10px 20px rgba(0, 57, 121, 0.329);
+}
+.example1 {
+  border-radius: 8px;
+  height:256px;
+  margin: 10px;
+    border: solid 3px rgba(0, 64, 138, 0.26);
+      box-shadow: 10px 10px 20px rgba(0, 57, 121, 0.329);
+}
+.example2 {
+  border-radius: 8px;
+  height: 256px;
+  margin: 10px;
+    border: solid 3px rgba(0, 64, 138, 0.26);
+      box-shadow: 10px 10px 20px rgba(0, 57, 121, 0.329);
+}
+.example3 {
+  border-radius: 8px;
+  height: 256px;
+  margin: 10px;
+  border: solid 3px rgba(0, 64, 138, 0.26);
+  box-shadow: 10px 10px 20px rgba(0, 57, 121, 0.329);
+  opacity: 95%;
+}
+.examples {
+  display: flex;
+  align-items: center;
+    transform:
+        perspective(12cm) rotateY(-24deg) scale(0.5);
+  margin-top: -180px;
+  margin-left: 120px
 }
