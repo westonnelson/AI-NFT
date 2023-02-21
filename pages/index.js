@@ -2,11 +2,34 @@ import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link';
 import styles from '../styles/Home.module.css'
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import Modal from '../components/Modal';
+import Result from '../components/Result';
+import {
+    connectWallet,
+    getCurrentWalletConnected,
+    mintNFT,
+} from "../utils/interact.js";
+
+import FormData from 'form-data';
+
+import {
+    pinFileToIPFS
+} from "../utils/pinata.js"
+
 export default function Home() {
   const [prompt, setPrompt] = useState("");
   const [imgs, setImgs] = useState();
   const [loading, setLoading] = useState(false);
+  const [ modal, setModal] = useState(false);
+  const [ result, setResult ] = useState(false);
+  const [ walletAddress, setWalletAddress ] = useState("");
+  const [ name, setName] = useState("");
+  const [ description, setDescription ] = useState("");
+  const [ img, setImg ] = useState("")
+  const [ status, setStatus] = useState("");
+  const [ wallet, setWallet] = useState("");
+
   const generateImage = async () => {
     if (prompt) {
       try {
@@ -21,6 +44,7 @@ export default function Home() {
         })
       })
       const data = await response.json();
+      console.log(data);
       setImgs(data);
       setLoading(false);
     } catch (error) {
@@ -28,9 +52,75 @@ export default function Home() {
       setLoading(false);
     }}
   }
+  const handleClick = (img) => {
+    setImg(img);
+    setModal(true);
+  }
 
+  const handleUseEffect = async () => {
+    const { address, status } = await getCurrentWalletConnected();
+    setWallet(address);
+  }
+   useEffect(() => {
+       handleUseEffect()
+       addWalletListener(); 
+   }, []);
+
+    const connectWalletPressed = async () => {
+        const walletResponse = await connectWallet();
+        setWalletAddress(walletResponse.address)
+    };
+
+    const onMintPressed = async () => {
+            console.log(img);
+            const response = await fetch("/api/upload", {
+                method: "POST",
+                body: JSON.stringify(img),
+            });
+            const data = await response.json();
+            await console.log("HELLO", data)
+            const { status } = await mintNFT(
+                `https://gateway.pinata.cloud/ipfs/${data.IpfsHash}`,
+                name,
+                description
+            )
+            setStatus(status);
+            setModal(false);
+            setResult(true);
+    };
+    
+    function addWalletListener() {
+        if (window.ethereum) {
+            window.ethereum.on("accountsChanged", (accounts) => {
+                if (accounts.length > 0) {
+                    setWallet(accounts[0]);
+                } else {
+                    setWallet("");
+                }
+            });
+        } else {
+            setStatus(
+                <p>
+                    {" "}
+                    🦊{" "}
+                    <a
+                        target="_blank"
+                        href={`https://metamask.io/download.html`}
+                    >
+                        You must install Metamask, a virtual Ethereum wallet, in
+                        your browser.
+                    </a>
+                </p>
+            );
+        }
+    }
   return (
       <div className={styles.main}>
+          {walletAddress.length > 0 ? (
+              <div className={styles.wallet}>Connected: {String(walletAddress).substring(0,6)}...{String(walletAddress).substring(38)}</div>
+          ) : (
+              <div className={styles.wallet} onClick={connectWalletPressed}>Connect Wallet</div>
+          )}
           <h1 className={styles.title}>
               Mint NFTs in seconds with{" "}
               <span className={styles.Dalle}>DALL-E</span>
@@ -79,11 +169,18 @@ export default function Home() {
           {imgs && !loading ? (
               <div className={styles.imgs}>
                   {imgs.map((img) => {
-                      return <img className={styles.nft} src={img.url}></img>;
+                      return (
+                          <img
+                              onClick={() => handleClick(img.url)}
+                              className={styles.nft}
+                              src={`${img.url}`}
+                          ></img>
+                      );
                   })}
               </div>
           ) : null}
-
+          {modal ? <Modal setModal={setModal} status={status} img={img} name={name} setName={setName} setDescription={setDescription} description={description} onMintPressed={onMintPressed}></Modal> : null}
+          { result ? <Result setResult={setResult} status={status}></Result> : null }
           <p className={styles.Replit}>
               Built by eefh1 on Replit for
               <span>

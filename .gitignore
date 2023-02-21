@@ -14,7 +14,9 @@
 
 # production
 /build
-
+artifacts/@openzeppelin
+artifacts/build-info
+cache
 # misc
 .DS_Store
 *.pem
