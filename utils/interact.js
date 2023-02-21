@@ -134,7 +134,7 @@ export const mintNFT = async (url, name, description) => {
         return {
             success: true,
             status:
-                "Check out your transaction on Etherscan: https://goerli.etherscan.io/tx/" +
+                "https://goerli.etherscan.io/tx/" +
                 txHash,
         };
     } catch (error) {

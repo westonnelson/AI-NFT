@@ -1,3 +1,4 @@
+import Link from "next/link";
 import styles from "../styles/Modal.module.css";
 export default function Result(props) {
     return (
@@ -7,10 +8,12 @@ export default function Result(props) {
                 className={styles.background}
             ></div>
 
-                <div className={styles.status}>
+            <div className={styles.status}>
+                <p>View your transaction on Etherscan!</p> 
+                <a href={props.status} target="_blank">
                     <p>{props.status}</p>
-                </div>
-
+                </a>
+            </div>
         </div>
     );
 }

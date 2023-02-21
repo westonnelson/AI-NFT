@@ -82,6 +82,11 @@
     border-radius: 6px;
     
 }
+
+.status > a {
+    text-decoration: none;
+    color: rgb(0, 81, 255);
+}
 .input {
     padding: 12px;
     margin: 12px;
