@@ -29,6 +29,7 @@ export default function Home() {
   const [ img, setImg ] = useState("")
   const [ status, setStatus] = useState("");
   const [ wallet, setWallet] = useState("");
+  const [ minting, setMinting ] = useState(false);
 
   const generateImage = async () => {
     if (prompt) {
@@ -72,6 +73,7 @@ export default function Home() {
     };
 
     const onMintPressed = async () => {
+            setMinting(true);
             console.log(img);
             const response = await fetch("/api/upload", {
                 method: "POST",
@@ -85,7 +87,9 @@ export default function Home() {
                 description
             )
             setStatus(status);
+                        setMinting(false);
             setModal(false);
+
             setResult(true);
     };
     
@@ -179,7 +183,7 @@ export default function Home() {
                   })}
               </div>
           ) : null}
-          {modal ? <Modal setModal={setModal} status={status} img={img} name={name} setName={setName} setDescription={setDescription} description={description} onMintPressed={onMintPressed}></Modal> : null}
+          {modal ? <Modal setModal={setModal} minting={minting} status={status} img={img} name={name} setName={setName} setDescription={setDescription} description={description} onMintPressed={onMintPressed}></Modal> : null}
           { result ? <Result setResult={setResult} status={status}></Result> : null }
           <p className={styles.Replit}>
               Built by eefh1 on Replit for

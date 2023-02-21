@@ -113,3 +113,17 @@
 .mint:hover{
     background-color: rgb(0, 190, 133);
 }
+
+.minting {
+    background-color: rgb(32, 121, 87);
+    color: white;
+    padding: 8px 32px 8px 32px;
+    font-size: 18px;
+    user-select: none;
+    cursor: pointer;
+    border-radius: 8px;
+    margin: 12px;
+    width: 70%;
+    text-align: center;
+    transition: 300ms;
+}
