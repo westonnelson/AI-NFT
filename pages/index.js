@@ -11,12 +11,6 @@ import {
     mintNFT,
 } from "../utils/interact.js";
 
-import FormData from 'form-data';
-
-import {
-    pinFileToIPFS
-} from "../utils/pinata.js"
-
 export default function Home() {
   const [prompt, setPrompt] = useState("");
   const [imgs, setImgs] = useState();
@@ -72,15 +66,13 @@ export default function Home() {
         setWalletAddress(walletResponse.address)
     };
 
-    const onMintPressed = async () => {
+    const onMintPressed = async () => { 
             setMinting(true);
-            console.log(img);
             const response = await fetch("/api/upload", {
                 method: "POST",
                 body: JSON.stringify(img),
             });
             const data = await response.json();
-            await console.log("HELLO", data)
             const { status } = await mintNFT(
                 `https://gateway.pinata.cloud/ipfs/${data.IpfsHash}`,
                 name,
@@ -121,9 +113,14 @@ export default function Home() {
   return (
       <div className={styles.main}>
           {walletAddress.length > 0 ? (
-              <div className={styles.wallet}>Connected: {String(walletAddress).substring(0,6)}...{String(walletAddress).substring(38)}</div>
+              <div className={styles.wallet}>
+                  Connected: {String(walletAddress).substring(0, 6)}...
+                  {String(walletAddress).substring(38)}
+              </div>
           ) : (
-              <div className={styles.wallet} onClick={connectWalletPressed}>Connect Wallet</div>
+              <div className={styles.wallet} onClick={connectWalletPressed}>
+                  Connect Wallet
+              </div>
           )}
           <h1 className={styles.title}>
               Mint NFTs in seconds with{" "}
@@ -183,19 +180,23 @@ export default function Home() {
                   })}
               </div>
           ) : null}
-          {modal ? <Modal setModal={setModal} minting={minting} status={status} img={img} name={name} setName={setName} setDescription={setDescription} description={description} onMintPressed={onMintPressed}></Modal> : null}
-          { result ? <Result setResult={setResult} status={status}></Result> : null }
-          <p className={styles.Replit}>
-              Built by eefh1 on Replit for
-              <span>
-                  <Link href="https://www.alchemy.com/">
-                      <img
-                          className={styles.Alchemy}
-                          src="https://files.readme.io/8a6f996-small-alchemy-logo-black.png"
-                      ></img>
-                  </Link>
-              </span>
-          </p>
+          {modal ? (
+              <Modal
+                  setModal={setModal}
+                  minting={minting}
+                  status={status}
+                  setStatus={setStatus}
+                  img={img}
+                  name={name}
+                  setName={setName}
+                  setDescription={setDescription}
+                  description={description}
+                  onMintPressed={onMintPressed}
+              ></Modal>
+          ) : null}
+          {result ? (
+              <Result setResult={setResult} status={status}></Result>
+          ) : null}
       </div>
   );
 }

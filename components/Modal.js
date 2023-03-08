@@ -1,10 +1,15 @@
 import styles from "../styles/Modal.module.css"
 
 export default function Modal(props){
+
+    const handleOutClick = () => {
+        props.setModal(false);
+        props.setStatus(null);
+    }
     return (
         <div className={styles.Modal}>
             <div
-                onClick={() => props.setModal(false)}
+                onClick={handleOutClick}
                 className={styles.background}
             ></div>
             <div className={styles.island}>

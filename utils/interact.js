@@ -4,8 +4,6 @@ const Contract = require("web3-eth-contract");
 const contractABI = require("../contract-abi.json");
 const contractAddress = "0x6127982F78e80457cB97a6F39Db0236C1048e77B";
 
-const {pinJSONToIPFS} = require("./pinata.js");
-
 export const connectWallet = async () => {
     if (window.ethereum) {
         try {
@@ -106,9 +104,14 @@ export const mintNFT = async (url, name, description) => {
     metadata.description = description;
 
     //pinata pin request
-    const pinataResponse = await pinJSONToIPFS(metadata);
-    const tokenURI = `https://gateway.pinata.cloud/ipfs/${pinataResponse.data.IpfsHash}`;
+    const pinataGet = await fetch("/api/uploadJSON", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(metadata)
+    })
+    const pinataResponse = await pinataGet.json();
     console.log(pinataResponse);
+    const tokenURI = `https://gateway.pinata.cloud/ipfs/${pinataResponse.IpfsHash}`;
     //load smart contract
     window.contract = await new Contract(contractABI, contractAddress); //loadContract();
 
