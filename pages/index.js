@@ -24,6 +24,8 @@ export default function Home() {
   const [ status, setStatus] = useState("");
   const [ wallet, setWallet] = useState("");
   const [ minting, setMinting ] = useState(false);
+  const [ selected, setSelected ] = useState([]);
+  const [ minted, setMinted ] = useState([]); 
 
   const generateImage = async () => {
     if (prompt) {
@@ -39,7 +41,6 @@ export default function Home() {
         })
       })
       const data = await response.json();
-      console.log(data);
       setImgs(data);
       setLoading(false);
     } catch (error) {
@@ -47,8 +48,13 @@ export default function Home() {
       setLoading(false);
     }}
   }
-  const handleClick = (img) => {
+  const handleClick = (img, i) => {
     setImg(img);
+    selected.some(element => {
+        return element === img
+    }) ? setSelected(selected.filter(e => {
+        return e !== img
+    })) : setSelected([ ...selected, img])
     setModal(true);
   }
 
@@ -79,12 +85,16 @@ export default function Home() {
                 description
             )
             setStatus(status);
-                        setMinting(false);
+            setMinting(false);
             setModal(false);
-
+            setMinted([...minted, {img, name, description, status}])
             setResult(true);
     };
     
+    const handleMintClick = () => {
+        setModal(true);
+    }
+
     function addWalletListener() {
         if (window.ethereum) {
             window.ethereum.on("accountsChanged", (accounts) => {
@@ -112,6 +122,16 @@ export default function Home() {
     }
   return (
       <div className={styles.main}>
+          <Head>
+              <script
+                  type="module"
+                  src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"
+              ></script>
+              <script
+                  nomodule
+                  src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"
+              ></script>
+          </Head>
           {walletAddress.length > 0 ? (
               <div className={styles.wallet}>
                   Connected: {String(walletAddress).substring(0, 6)}...
@@ -169,34 +189,65 @@ export default function Home() {
           ) : null}
           {imgs && !loading ? (
               <div className={styles.imgs}>
-                  {imgs.map((img) => {
+                  {imgs.map((img, i) => {
                       return (
-                          <img
-                              onClick={() => handleClick(img.url)}
-                              className={styles.nft}
-                              src={`${img.url}`}
-                          ></img>
+                          <div
+                              key={i}
+                              className={styles.nftContainer}
+                              onClick={() => handleClick(img.url, i)}
+                          >
+                              <img
+                                  className={styles.nft}
+                                  src={`${img.url}`}
+                              ></img>
+                              {/*selected.some((element) => {
+                                  return element === img.url;
+                              }) ? (
+                                  <ion-icon name="checkmark-circle-outline"></ion-icon>
+                              ) : (
+                                  <ion-icon name="ellipse-outline"></ion-icon>
+                              )*/}
+                          </div>
                       );
                   })}
               </div>
           ) : null}
-          {modal ? (
-              <Modal
-                  setModal={setModal}
-                  minting={minting}
-                  status={status}
-                  setStatus={setStatus}
-                  img={img}
-                  name={name}
-                  setName={setName}
-                  setDescription={setDescription}
-                  description={description}
-                  onMintPressed={onMintPressed}
-              ></Modal>
+          {/*selected.length ? (
+              <div onClick={handleMintClick} className={styles.mintNFT}>
+                  Mint!
+              </div>
+          ) : null*/}
+          {modal && selected.length ? (
+                  <Modal
+                      setModal={setModal}
+                      minting={minting}
+                      status={status}
+                      setStatus={setStatus}
+                      img={img}
+                      name={name}
+                      setName={setName}
+                      setDescription={setDescription}
+                      description={description}
+                      onMintPressed={onMintPressed}
+                  ></Modal>
           ) : null}
           {result ? (
               <Result setResult={setResult} status={status}></Result>
           ) : null}
+          {minted.length ? <div className={styles.minted}>
+            {minted.map(nft => {
+                return (
+                    <div className={styles.mintedNFT}>
+                        <img src={nft.img} className={styles.image}></img>
+                        <h4 className={styles.name}>{nft.name}</h4>
+                        <p className={styles.description}>{nft.description}</p>
+                        <a className={styles.link} href={nft.status} target="_blank">
+                            <ion-icon name="link-outline"></ion-icon>
+                        </a>
+                    </div>
+                );
+            })}
+          </div>: null}
       </div>
   );
 }

@@ -131,13 +131,13 @@ export const mintNFT = async (url, name, description) => {
             params: [transactionParameters],
         });
         console.log(
-            "✅ Check out your transaction on Etherscan: https://goerli.etherscan.io/tx/" +
+            "✅ Check out your transaction on Etherscan: https://sepolia.etherscan.io/tx/" +
                 txHash
         );
         return {
             success: true,
             status:
-                "https://goerli.etherscan.io/tx/" +
+                "https://sepolia.etherscan.io/tx/" +
                 txHash,
         };
     } catch (error) {

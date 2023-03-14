@@ -20,6 +20,7 @@ export default function Modal(props){
                         placeholder="Name"
                         onInput={(e) => props.setName(e.target.value)}
                         value={props.name}
+                        autoComplete="none"
                     ></input>
                     <input
                         className={styles.input}
@@ -42,11 +43,6 @@ export default function Modal(props){
                         </div>
                     )}
                 </div>
-                {props.status ? (
-                    <div className={styles.status}>
-                        <p>{props.status}</p>
-                    </div>
-                ) : null}
             </div>
         </div>
     );
