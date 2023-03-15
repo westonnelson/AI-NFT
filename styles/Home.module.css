@@ -63,14 +63,9 @@
   right: -200px;
 
 }
-
 .button:hover {
-  border-radius: 128px;
-  transform: rotate(10deg);
-  padding: 64px;
-  right: -200px;
+  background-color: rgb(0, 94, 202);
 }
-
 .Replit {
   display: flex;
   align-items: center;
