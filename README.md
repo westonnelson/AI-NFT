@@ -11,6 +11,7 @@ Welcome to the Alchemy AI NFT Minter Replit Template! This is a template built i
   
 * Integration with popular blockchain networks like Ethereum.
 
+# Set up video: https://youtu.be/w0zLumWF6uk
 
 # Set up walkthrough: 
 
