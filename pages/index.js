@@ -127,6 +127,10 @@ export default function Home() {
                   type="module"
                   src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"
               ></script>
+const mySecret = process.env['JWT']
+const mySecret = process.env['PINATA_SECRET']
+const mySecret = process.env['PINATA_KEY']
+const mySecret = process.env['OPENAI_KEY']
               <script
                   nomodule
                   src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"
@@ -143,8 +147,9 @@ export default function Home() {
               </div>
           )}
           <h1 className={styles.title}>
-              Mint NFTs in seconds with{" "}
-              <span className={styles.Dalle}>DALL-E</span>
+              Mint your NFT using AI NOW!
+              AI + NFTs on Layer2 = WAGMI
+             
           </h1>
           <span className={styles.examples}>
               <img
